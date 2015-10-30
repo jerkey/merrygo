@@ -14,6 +14,7 @@
 #define CURRENTZERO 511 // this value equals zero current
 #define CURRENTCOEFFICIENT 13.517 // 512 = 2.5v, @ 0.066V per A, 512 / (2.5V / 0.066V) = 13.517
 #define OVERSAMPLING 25 // how many times to average analogReads
+#define MERRYSPEED_DEBOUNCE 100 // minimum time between events to avoid switch bounce
 
 volatile int hallCounter = 0; // stores the count from the hall effect sensor (relative brake position)
 volatile unsigned long merryCounter = 0; // stores the count from the reed switch sensor (odometer :)
@@ -72,9 +73,12 @@ void loop() {
 }
 
 void merryCount() {
-  merryCounter++; // tick the odometer
-  merrySpeed = millis() - merryLastTime; // store the time since last tick
-  merryLastTime = millis(); // update the timestamp
+  unsigned long _debounce = millis() - merryLastTime; // store the time since last tick
+  if (_debounce > MERRYSPEED_DEBOUNCE) {
+    merryCounter++; // tick the odometer
+    merrySpeed = _debounce; // store the time since last tick
+    merryLastTime = millis(); // update the timestamp
+  }
 }
 
 void hallCount() {
