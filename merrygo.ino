@@ -11,7 +11,7 @@
 #define HALLEFFECT 2 // (int0) fed through a 2N3904 from sensor (needs pullup)
 #define LEDPIN 13 // this LED follows the hall effect signal by software
 #define CURRENT A0 // motor current sense ADC pin
-#define CURRENTZERO 512 // this value equals zero current
+#define CURRENTZERO 511 // this value equals zero current
 #define CURRENTCOEFFICIENT 13.517 // 512 = 2.5v, @ 0.066V per A, 512 / (2.5V / 0.066V) = 13.517
 #define OVERSAMPLING 25 // how many times to average analogReads
 
@@ -92,7 +92,10 @@ void runMotor(unsigned long timeToRun) {
   digitalWrite(PWMHI,HIGH); // turn motor on full power (you could do analogWrite() to PWM it)
   while (millis() - motorStart < timeToRun) {
     Serial.print("current = ");
-    Serial.println(getCurrent(),1);
+    Serial.print(getCurrent(),1);
+    Serial.print(" A0=(");
+    Serial.print(analogRead(CURRENT));
+    Serial.println(")");
     delay(10);
   }
   digitalWrite(PWMHI,LOW); // turn off the motor, we're done
