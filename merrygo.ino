@@ -1,3 +1,6 @@
+// merrygo v0.1 by jake@spaz.org
+// drives (and reports from) a Pololu #1457
+// https://www.pololu.com/product/1457
 #define BAUDRATE 57600 // set serial baud rate here
 #define FAULT1 7 // FF1 pin from Pololu #1457
 #define FAULT2 8 // FF2 pin from Pololu #1457
@@ -32,6 +35,7 @@ void setup() {
 }
 
 void loop() {
+  delay(100); // keep from jamming the serial port
   Serial.print("hallCounter = ");
   Serial.print(hallCounter);
   Serial.print("   merrySpeed = ");
